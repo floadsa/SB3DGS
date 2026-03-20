@@ -1,7 +1,7 @@
 # SB3DGS
 
 ### description:
-**_SB3DGS_**_ _- simple bruncell's 3D graphic software.  
+**_SB3DGS_** _- simple bruncell's 3D graphic software  
 Created for easy editing of 3D models.  
 Currently under active development._
 ### build: 
