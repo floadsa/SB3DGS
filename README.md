@@ -7,6 +7,10 @@ cd build
 ```
 
 ```cmake
-cmake ..
+cmake .. #building
 make
 ```
+```bash
+./SB3DGS #launch
+```
+
