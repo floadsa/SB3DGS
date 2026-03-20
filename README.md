@@ -6,6 +6,7 @@ _test_
 ### build: 
 ```bash
 git clone https://github.com//floadsa/SB3DGS.git
+cd SB3DGS
 cd build
 ```
 
