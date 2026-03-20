@@ -1,4 +1,5 @@
 # SB3DGS
 
 # build: 
-``` git clone https://github.com/username/repository.git
+``` bash
+git clone https://github.com/username/repository.git
