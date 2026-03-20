@@ -5,7 +5,7 @@ _test_
 
 ### build: 
 ```bash
-git clone https://github.com/username/repository.git
+git clone https://github.com//floadsa/SB3DGS.git
 cd build
 ```
 
