@@ -1,4 +1,4 @@
-# SB3DGS \(0 - 0)/
+# SB3DGS \\(0 - 0)/
 
 ### description:
 **_SB3DGS_** _- simple bruncell's 3D graphic software  
