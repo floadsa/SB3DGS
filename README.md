@@ -1,6 +1,6 @@
-### SB3DGS
+# SB3DGS
 
-# build: 
+### build: 
 ```bash
 git clone https://github.com/username/repository.git
 cd build
