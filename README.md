@@ -19,8 +19,8 @@ make
 ./SB3DGS #launch
 ```
 ### plans:
-1. Gradual improvement of UI
-2. Improvement of 3D calculations and rendering
-3. Creating a parser for .obj files
-4. Creating a persistent interface
+1. _Gradual improvement of UI_
+2. _Improvement of 3D calculations and rendering_
+3. _Creating a parser for .obj files_
+4. _Creating a persistent interface_
 
