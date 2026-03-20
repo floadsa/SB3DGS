@@ -1,4 +1,4 @@
-# SB3DGS
+### SB3DGS
 
 # build: 
 ```bash
