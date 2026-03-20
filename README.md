@@ -1,5 +1,8 @@
 # SB3DGS
 
+### description:
+_test_
+
 ### build: 
 ```bash
 git clone https://github.com/username/repository.git
