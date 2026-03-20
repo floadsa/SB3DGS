@@ -18,4 +18,9 @@ make
 ```bash
 ./SB3DGS #launch
 ```
+### plans:
+1. Gradual improvement of UI
+2. Improvement of 3D calculations and rendering
+3. Creating a parser for .obj files
+4. Creating a persistent interface
 
