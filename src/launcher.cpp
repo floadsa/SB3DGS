@@ -11,112 +11,112 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
-glViewport(0, 0, width, height);
+	glViewport(0, 0, width, height);
 }  
 
 int Launch()
 {
 
-glfwInit();
-glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  
-glfwWindowHint(GLFW_DEPTH_BITS, 24);
-GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "SB3DGS", NULL, NULL);
-glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
-glfwMakeContextCurrent(window);
+	glfwInit();
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	
+	glfwWindowHint(GLFW_DEPTH_BITS, 24);
+	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "SB3DGS", NULL, NULL);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
+	glfwMakeContextCurrent(window);
 
-//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-
-if (window == NULL || !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){std::cout << "error" << std::endl;glfwTerminate();return -1;}
-
-glEnable(GL_BLEND);
-glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 
+	if (window == NULL || !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){std::cout << "error" << std::endl;glfwTerminate();return -1;}
 
-double mouseX, mouseY;
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-int h = 0;
 
-Text text(-1, 0.9, 4, 2, 0.1);
-text.SetFont("BFont.png");
 
-Text greettext(-0.9, 0, 25, 3, 0.06);
-greettext.SetFont("BFont.png");
-greettext.SetText("This program does not work yet, but probably will. That's all for now");
-greettext.Update();
+	double mouseX, mouseY;
 
-Button but(-0.7f, 0.90f, 0.6f, 0.2f);
-but.SetCall(
-	[&h]()
+	int h = 0;
+
+	Text text(-1, 0.9, 4, 2, 0.1);
+	text.SetFont("BFont.png");
+
+	Text greettext(-0.9, 0, 25, 3, 0.06);
+	greettext.SetFont("BFont.png");
+	greettext.SetText("This program does not work yet, but probably will. That's all for now");
+	greettext.Update();
+
+	Button but(-0.7f, 0.90f, 0.6f, 0.2f);
+	but.SetCall(
+		[&h]()
+		{
+		h++;
+			
+		}
+	);
+
+	bool click = false;
+
+
+	Camera cam;
+
+	Object obj;
+	obj.Init();
+
+	obj.SetTexture("buttonfill.png");
+
+	obj.AddPoint(Point(-1, 0, 1, 0, 0));
+	obj.AddPoint(Point(-1, 0, 0, 0, 1));
+	obj.AddPoint(Point( 1, 0, 0, 1, 1));
+	obj.AddPoint(Point( 1, 0, 1, 1, 0));
+
+	obj.AddFace(0,1,2);
+	obj.AddFace(2,3,0);
+
+	obj.Update();
+
+
+
+	while(!glfwWindowShouldClose(window))
 	{
-	h++;
-	    
+	//cam.yaw += 1.f;
+
+	glfwGetCursorPos(window, &mouseX, &mouseY);
+	glClearColor(0.5, 0.5, 0.5, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glEnable(GL_DEPTH_TEST);
+
+	obj.Render(cam.getViewMatrix(), cam.getProjectionMatrix());
+
+
+	glDisable(GL_DEPTH_TEST);
+
+	text.SetText(std::to_string(h));
+
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
+	{
+	click = true; 
+	but.Check(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
 	}
-);
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+	{
+	click = false;
+	}
 
-bool click = false;
+	text.Update();
+	but.Update();
 
+	but.Render(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
+	text.Render();
+	greettext.Render();
 
-Camera cam;
-
-Object obj;
-obj.Init();
-
-obj.SetTexture("buttonfill.png");
-
-obj.AddPoint(Point(-1, 0, 1, 0, 0));
-obj.AddPoint(Point(-1, 0, 0, 0, 1));
-obj.AddPoint(Point( 1, 0, 0, 1, 1));
-obj.AddPoint(Point( 1, 0, 1, 1, 0));
-
-obj.AddFace(0,1,2);
-obj.AddFace(2,3,0);
-
-obj.Update();
-
-
-
-while(!glfwWindowShouldClose(window))
-{
-//cam.yaw += 1.f;
-
-glfwGetCursorPos(window, &mouseX, &mouseY);
-glClearColor(0.5, 0.5, 0.5, 1.0f);
-glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-glEnable(GL_DEPTH_TEST);
-
-obj.Render(cam.getViewMatrix(), cam.getProjectionMatrix());
-
-
-glDisable(GL_DEPTH_TEST);
-
-text.SetText(std::to_string(h));
-
-if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
-{
-click = true; 
-but.Check(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
-}
-if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-{
-click = false;
-}
-
-text.Update();
-but.Update();
-
-but.Render(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
-text.Render();
-greettext.Render();
-
-glfwSwapBuffers(window);
-glfwPollEvents();
-}
-glfwTerminate();
-return 0;
+	glfwSwapBuffers(window);
+	glfwPollEvents();
+	}
+	glfwTerminate();
+	return 0;
 }

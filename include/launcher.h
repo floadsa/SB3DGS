@@ -1,4 +1,3 @@
-#ifndef LAUNCHER
-#define LAUNCHER
+#pragma once
+
 int Launch();
-#endif
