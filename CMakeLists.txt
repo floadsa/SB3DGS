@@ -2,26 +2,22 @@ cmake_minimum_required(VERSION 3.10)
 
 project(SB3DGS)
 
+file(GLOB_RECURSE SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.cpp)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories(${PROJECT_SOURCE_DIR}/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR}/third_party)
 
-set(SOURCE_FILES
-    src/main.cpp
-    src/launcher.cpp
-    src/initer.cpp
-    src/gl_utils.cpp
-    src/Models/mesh.cpp
-    src/Models/scene.cpp
-    src/Models/object.cpp
-    src/Models/camera.cpp
-    src/Models/UI/image.cpp
-    src/Models/UI/text.cpp
-    src/Models/UI/button.cpp
-    src/glad.c
-)
+add_executable (${PROJECT_NAME} ${SOURCES})
 
-add_executable(SB3DGS ${SOURCE_FILES})
+find_package(OpenGL REQUIRED)
+find_package(glfw3 CONFIG REQUIRED)
+find_package(glm CONFIG REQUIRED)
+find_package(glad CONFIG REQUIRED)
 
-target_link_libraries(SB3DGS glfw GL)
+target_link_libraries(SB3DGS
+OpenGL::GL 
+glfw
+glm::glm
+glad::glad)

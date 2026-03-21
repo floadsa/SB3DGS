@@ -1,5 +1,4 @@
-#ifndef MESH
-#define MESH
+#pragma once
 
 #include <vector>
 #include <glad/glad.h>
@@ -32,6 +31,4 @@ void AddPoint(Point point);
 void AddFace(unsigned int index_one, unsigned int index_two, unsigned int index_three);
 
 };
-
-#endif
 //./SB3DGS
