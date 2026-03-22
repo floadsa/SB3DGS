@@ -9,14 +9,19 @@
 #include "object.h"
 #include "camera.h"
 
+static int window_width = WINDOW_WIDTH;
+static int window_height = WINDOW_HEIGHT;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
+	window_width = width;
+	window_height = height;
+
 	glViewport(0, 0, width, height);
 }  
 
 int Launch()
 {
-
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -35,21 +40,22 @@ int Launch()
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-
-
 	double mouseX, mouseY;
 
 	int h = 0;
+	
+	float pixels = 12.0f;
+	float font_size = pixels / window_height;
 
-	Text text(-1, 0.9, 4, 2, 0.1);
+	Text text(0.2f, 0.2f, 5, 5, font_size);
 	text.SetFont("BFont.png");
 
-	Text greettext(-0.9, 0, 25, 3, 0.06);
+	Text greettext(0.4f, 0.2f, 25, 10, font_size);
 	greettext.SetFont("BFont.png");
 	greettext.SetText("This program does not work yet, but probably will. That's all for now");
 	greettext.Update();
 
-	Button but(-0.7f, 0.90f, 0.6f, 0.2f);
+	Button but(0.2f, 0.6f, 0.6f, 0.2f);
 	but.SetCall(
 		[&h]()
 		{
@@ -78,44 +84,46 @@ int Launch()
 
 	obj.Update();
 
-
-
 	while(!glfwWindowShouldClose(window))
 	{
-	//cam.yaw += 1.f;
+		//cam.yaw += 1.f;
 
-	glfwGetCursorPos(window, &mouseX, &mouseY);
-	glClearColor(0.5, 0.5, 0.5, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glfwGetCursorPos(window, &mouseX, &mouseY);
+		glClearColor(0.5, 0.5, 0.5, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnable(GL_DEPTH_TEST);
+		glEnable(GL_DEPTH_TEST);
 
-	obj.Render(cam.getViewMatrix(), cam.getProjectionMatrix());
+		obj.Render(cam.getViewMatrix(), cam.getProjectionMatrix());
 
+		glDisable(GL_DEPTH_TEST);
 
-	glDisable(GL_DEPTH_TEST);
+		text.SetText(std::to_string(h));
 
-	text.SetText(std::to_string(h));
+		float nx = mouseX / window_width;
+		float ny = 1.0f - (mouseY / window_height);
 
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
-	{
-	click = true; 
-	but.Check(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
-	}
-	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
-	{
-	click = false;
-	}
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
+		{
+			click = true;
+			but.Check(nx, ny, cam.getOrthoProjview());
+		}
 
-	text.Update();
-	but.Update();
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
+		{
+			click = false;
+		}
 
-	but.Render(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
-	text.Render();
-	greettext.Render();
+		text.Update();
+		but.Update();
 
-	glfwSwapBuffers(window);
-	glfwPollEvents();
+		but.Render(nx, ny, cam.getOrthoProjview());
+
+		text.Render(cam.getOrthoProjview());
+		greettext.Render(cam.getOrthoProjview());
+
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 	glfwTerminate();
 	return 0;

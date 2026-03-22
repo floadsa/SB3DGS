@@ -7,20 +7,21 @@
 class Camera
 {
 public:
+    glm::vec3 position;
+    glm::vec3 front;
+    glm::vec3 up;
+    glm::mat4 ortho;
 
-glm::vec3 position;
-glm::vec3 front;
-glm::vec3 up;
- 
-float fov;
-float aspect;
-float nearPlane;
-float farPlane;
-float yaw;
-float pitch;
+    float fov;
+    float aspect;
+    float nearPlane;
+    float farPlane;
+    float yaw;
+    float pitch;
 
-Camera();
+    Camera();
 
-glm::mat4 getProjectionMatrix();
-glm::mat4 getViewMatrix();
+    glm::mat4 getProjectionMatrix();
+    const glm::mat4& getOrthoProjview();
+    glm::mat4 getViewMatrix();
 };

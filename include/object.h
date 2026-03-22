@@ -10,11 +10,11 @@ class Object : public Mesh
 {
 protected:
 
-
 public:
+    Object();
 
-Object();
-void Init() override;
-void Render(glm::mat4 view, glm::mat4 prog);
+    void Init() override;
 
+    void Render(const glm::mat4 &view, const glm::mat4 &proj);
+    void Render(const glm::mat4 &projview); // For Ortho
 };

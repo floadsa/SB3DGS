@@ -1,27 +1,27 @@
 #include "button.h"
 
-Button::Button(float _x, float _y, float _width, float _height)
+Button::Button(float _nx, float _ny, float _nwidth, float _nheight)
 {
-x = _x;
-y = _y;
-width = _width;
-height = _height;
-size = 0.07f;
+	nx = _nx;
+	ny = _ny;
+	nwidth = _nwidth;
+	nheight = _nheight;
+	size = 0.05f;
 
-Image _body(x, y , width, height);
-_body.SetTexture("buttonfill.png");
+	Image _body(nx, ny, nwidth, nheight);
+	_body.SetTexture("buttonfill.png");
 
-Image _activebody(x, y , width, height);
-_activebody.SetTexture("activebuttonfill.png");
+	Image _activebody(nx - 0.01f, ny - 0.01f, nwidth + 0.01f, nheight + 0.01f);
+	_activebody.SetTexture("activebuttonfill.png");
 
-body = _body;
-ActiveBody = _activebody;
-text = Text(x + width / 10, y - height / 10, 10, 10, size);
+	body = _body;
+	ActiveBody = _activebody;
+	text = Text(nx + nwidth / 2.0f, ny + nheight / 2.0f, 10, 10, size);
 
-text.SetFont("BFont.png");
-text.SetText("Button");
-
+	text.SetFont("BFont.png");
+	text.SetText("Button");
 }
+
 void Button::SetText(const std::string& str)
 {
 	text.SetText(str);
@@ -31,10 +31,12 @@ void Button::SetBody(Image _body)
 {
 	body = _body;
 }
+
 void Button::SetActiveBody(Image _activeBody)
 {
 	ActiveBody = _activeBody;
 }
+
 void Button::SetText(Text _text)
 {
 	text = _text;
@@ -46,31 +48,31 @@ void Button::SetCall(std::function<void()> f)
 }
 void Button::Call()
 {
-if(function)
-function();
+	if(function)
+	function();
 }
+
 void Button::Update()
 {
-body.Update();
-text.Update();
-}
-void Button::Check(float mosPosX, float mosPosY)
-{
-
-if(mosPosX > x && mosPosY > -y && mosPosX < width + x && mosPosY < height - y)
-{
-	ActiveBody.Render();
-	this->Call();
+	body.Update();
+	text.Update();
 }
 
-}
-
-void Button::Render(float mosPosX, float mosPosY)
+void Button::Check(float mosPosX, float mosPosY, const glm::mat4& projview)
 {
-	body.Render();
-	if(mosPosX > x && mosPosY > -y && mosPosX < width + x && mosPosY < height - y)
+	if(mosPosX > nx && mosPosY > ny && mosPosX < nwidth + nx && mosPosY < nheight + ny)
 	{
-	ActiveBody.Render();
+		ActiveBody.Render(projview);
+		this->Call();
 	}
-	text.Render();
+}
+
+void Button::Render(float mosPosX, float mosPosY, const glm::mat4& projview)
+{
+	body.Render(projview);
+	if(mosPosX > nx && mosPosY > -ny && mosPosX < nwidth + nx && mosPosY < nheight - ny)
+	{
+		ActiveBody.Render(projview);
+	}
+	text.Render(projview);
 }

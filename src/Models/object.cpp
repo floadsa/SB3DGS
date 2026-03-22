@@ -29,23 +29,42 @@ void Object::Init()
 	glEnableVertexAttribArray(1);
 }
 
-void Object::Render(glm::mat4 view, glm::mat4 proj)
+void Object::Render(const glm::mat4 &view, const glm::mat4 &proj)
 {
-glUseProgram(shaderProgram);
+	glUseProgram(shaderProgram);
 
-glActiveTexture(GL_TEXTURE0);
-glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
-glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 
-GLint projLoc  = glGetUniformLocation(shaderProgram, "proj");
-GLint viewLoc  = glGetUniformLocation(shaderProgram, "view");
+	GLint projLoc  = glGetUniformLocation(shaderProgram, "proj");
+	GLint viewLoc  = glGetUniformLocation(shaderProgram, "view");
 
-glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
-glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
-glBindVertexArray(VAO);
-glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
-glBindVertexArray(0);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
 
+void Object::Render(const glm::mat4 &projview)
+{
+	glUseProgram(shaderProgram);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
+
+	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+
+	GLint projLoc  = glGetUniformLocation(shaderProgram, "proj");
+	GLint viewLoc  = glGetUniformLocation(shaderProgram, "view");
+
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projview));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(glm::mat4(1.0f)));
+
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
