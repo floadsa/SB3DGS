@@ -1,3 +1,6 @@
+//Almost all of the contents of this file are temporary and are used just for testing purposes
+
+
 #include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
