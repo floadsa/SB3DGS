@@ -2,12 +2,12 @@
 
 Camera::Camera()
 {
-	position = glm::vec3(0, 1, -2);
+	position = glm::vec3(0, -2, 2);
 	fov = 60;
-	aspect = WINDOW_WIDTH/WINDOW_HEIGHT;
+	aspect = 1.777;
 	nearPlane = 0.01f;
 	farPlane = 200;
-	yaw = 180;
+	yaw = 270;
 	pitch = 0;
 	
 }

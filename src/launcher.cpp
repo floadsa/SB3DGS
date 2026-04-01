@@ -9,8 +9,7 @@
 #include "image.h"
 #include "text.h"
 #include "button.h"
-#include "object.h"
-#include "camera.h"
+#include "scene.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -32,13 +31,10 @@ int Launch()
 
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-
 	if (window == NULL || !gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){std::cout << "error" << std::endl;glfwTerminate();return -1;}
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-
 
 	double mouseX, mouseY;
 
@@ -49,52 +45,48 @@ int Launch()
 
 	Text greettext(-0.9, 0, 25, 3, 0.06);
 	greettext.SetFont("BFont.png");
-	greettext.SetText("This program does not work yet, but probably will. That's all for now");
+//	greettext.SetText("This program does not work yet, but probably will. That's all for now");
 	greettext.Update();
+
+	Scene scene;
+	scene.ConvertFromObj("monkey.obj");
 
 	Button but(-0.7f, 0.90f, 0.6f, 0.2f);
 	but.SetCall(
 		[&h]()
 		{
 		h++;
-			
 		}
 	);
 
 	bool click = false;
 
 
-	Camera cam;
-
-	Object obj;
-	obj.Init();
-
-	obj.SetTexture("buttonfill.png");
-
-	obj.AddPoint(Point(-1, 0, 1, 0, 0));
-	obj.AddPoint(Point(-1, 0, 0, 0, 1));
-	obj.AddPoint(Point( 1, 0, 0, 1, 1));
-	obj.AddPoint(Point( 1, 0, 1, 1, 0));
-
-	obj.AddFace(0,1,2);
-	obj.AddFace(2,3,0);
-
-	obj.Update();
+   
+//  for(int i = 0; i < scene.objects.size(); i++)
+//  scene.objects[i].Dump();
 
 
-
+//  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
+	float yaww = 0;
+	scene.cameras[0].pitch = -30;
+	
 	while(!glfwWindowShouldClose(window))
 	{
-	//cam.yaw += 1.f;
+
+	//This is temporary
+	yaww += 0.4f;
+	scene.cameras[0].yaw += 0.4f;
+	scene.cameras[0].position.x = 5 *  cosf(yaww * 3.1415 / 180);
+	scene.cameras[0].position.z = 5 *  sinf(yaww * 3.1415 / 180);
 
 	glfwGetCursorPos(window, &mouseX, &mouseY);
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
-
-	obj.Render(cam.getViewMatrix(), cam.getProjectionMatrix());
-
+	scene.Render();
 
 	glDisable(GL_DEPTH_TEST);
 

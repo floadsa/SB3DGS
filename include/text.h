@@ -1,12 +1,12 @@
 #pragma once
 
 #include <string>
-#include "mesh.h"
+#include "UImesh.h"
 
 class Text
 {
 protected:
-Mesh mesh;
+UIMesh mesh;
 std::string text;
 
 public:

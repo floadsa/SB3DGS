@@ -1,11 +1,11 @@
 #pragma once
 
-#include "mesh.h"
+#include "UImesh.h"
 
 class Image
 {
 protected:
-Mesh mesh;
+UIMesh mesh;
 float width;
 float height;
 float x;
