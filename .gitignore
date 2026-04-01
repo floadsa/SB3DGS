@@ -19,6 +19,8 @@ build/*
 !build/BFont.png
 !build/buttonfill.png
 !build/Font.png
+!build/monkey.mtl
+!build/monkey.obj
 
 # User-specific files
 *.rsuser
