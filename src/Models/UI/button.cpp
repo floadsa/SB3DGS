@@ -6,7 +6,7 @@ x = _x;
 y = _y;
 width = _width;
 height = _height;
-size = 0.07f;
+size = 0.05f;
 
 Image _body(x, y , width, height);
 _body.SetTexture("buttonfill.png");
@@ -49,12 +49,14 @@ void Button::Call()
 if(function)
 function();
 }
-void Button::Update()
+void Button::Update(float _mosPosX, float _mosPosY)
 {
 body.Update();
 text.Update();
+mosPosX = _mosPosX;
+mosPosY = _mosPosY;
 }
-void Button::Check(float mosPosX, float mosPosY)
+void Button::Check()
 {
 
 if(mosPosX > x && mosPosY > -y && mosPosX < width + x && mosPosY < height - y)
@@ -65,7 +67,7 @@ if(mosPosX > x && mosPosY > -y && mosPosX < width + x && mosPosY < height - y)
 
 }
 
-void Button::Render(float mosPosX, float mosPosY)
+void Button::Render()
 {
 	body.Render();
 	if(mosPosX > x && mosPosY > -y && mosPosX < width + x && mosPosY < height - y)

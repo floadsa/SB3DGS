@@ -60,7 +60,6 @@ mesh.AddPoint(Point(xpos + size, ypos,         0, step * col + step, 1 - (step *
 mesh.AddPoint(Point(xpos, ypos - size,         0, step * col	   , 1 - (step * row + step)));
 mesh.AddPoint(Point(xpos + size, ypos - size,     0, step * col + step, 1 - (step * row + step)));
 
-
 mesh.AddFace(base + 0, base + 1, base + 2);
 mesh.AddFace(base + 1, base + 3, base + 2);
 

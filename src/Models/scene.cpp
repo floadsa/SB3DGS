@@ -226,7 +226,6 @@ void Scene::ConvertFromObj(const char* objfilename)
 
     std::cout << "\033[0m" << "Model was successfully converted " << "\033[32m" << "[OK]" << "\033[0m" << std::endl;	
 	file.close();
-
 }
 
 void Scene::Render()

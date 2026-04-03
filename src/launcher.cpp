@@ -11,7 +11,11 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
-}  
+}
+void window_size_callback(GLFWwindow* window, int width, int height)
+{
+  
+}
 
 int Launch()
 {
@@ -24,6 +28,7 @@ int Launch()
 	glfwWindowHint(GLFW_DEPTH_BITS, 24);
 	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "SB3DGS", NULL, NULL);
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
+	glfwSetWindowSizeCallback(window, window_size_callback);  
 	glfwMakeContextCurrent(window);
 
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -34,6 +39,7 @@ int Launch()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	double mouseX, mouseY;
+	int width, height;
 
 	int h = 0;
 
@@ -57,12 +63,9 @@ int Launch()
 	);
 
 	bool click = false;
-
-
    
 //  for(int i = 0; i < scene.objects.size(); i++)
 //  scene.objects[i].Dump();
-
 
 //  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     
@@ -71,8 +74,14 @@ int Launch()
 	
 	while(!glfwWindowShouldClose(window))
 	{
+//	std::cout << "Window resized: " << width << height << std::endl;
+	glfwGetWindowSize(window, &width, &height);
 
 	//This is temporary
+	for(int i = 0; i < scene.cameras.size(); i++)
+	scene.cameras[i].aspect = (float)width / (float)height;
+
+	
 	yaww += 0.4f;
 	scene.cameras[0].yaw += 0.4f;
 	scene.cameras[0].position.x = 5 *  cosf(yaww * 3.1415 / 180);
@@ -92,7 +101,7 @@ int Launch()
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
 	{
 	click = true; 
-	but.Check(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
+	but.Check();
 	}
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 	{
@@ -100,9 +109,9 @@ int Launch()
 	}
 
 	text.Update();
-	but.Update();
+	but.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
 
-	but.Render(mouseX/(WINDOW_WIDTH/2)-1, mouseY/(WINDOW_HEIGHT/2)-1);
+	but.Render();
 	text.Render();
 	greettext.Render();
 

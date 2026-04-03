@@ -24,6 +24,7 @@ std::vector<Object> objects;
 std::vector<Camera> cameras;
 
 Scene();
+void Update();
 void AddObject();
 void ConvertFromObj(const char* objfilename);
 void Render();
