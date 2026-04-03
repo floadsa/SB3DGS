@@ -173,8 +173,6 @@ void Object::ReNormal()
 		vertices[indices[i+2]].ny = n.y;
 		vertices[indices[i+2]].nz = n.z;
 	}
-
-	
 	//std::cout << vertices.size() << std::endl;
 }
 

@@ -43,31 +43,47 @@ int Launch()
 
 	int h = 0;
 
-	Text text(-1, 0.9, 4, 2, 0.1);
-	text.SetFont("BFont.png");
-
-	Text greettext(-0.9, 0, 25, 3, 0.06);
-	greettext.SetFont("BFont.png");
-//	greettext.SetText("This program does not work yet, but probably will. That's all for now");
-	greettext.Update();
-
 	Scene scene;
 	scene.ConvertFromObj("monkey.obj");
 
-	Button but(-0.7f, 0.90f, 0.6f, 0.2f);
-	but.SetCall(
-		[&h]()
+	Button RenderMode1Button(-0.99f, 0.99f, 0.25f, 0.07f);
+	Button RenderMode2Button(-0.99f, 0.91f, 0.25f, 0.07f);
+	Button RenderMode3Button(-0.99f, 0.83f, 0.25f, 0.07f);
+
+	RenderMode1Button.SetText("LINE");
+	RenderMode2Button.SetText("GRAY");
+	RenderMode3Button.SetText("COLR");
+
+
+	RenderMode1Button.SetCall(
+		[&scene]()
 		{
-		h++;
+		scene.SetRenderMode(0);
 		}
 	);
 
+	RenderMode2Button.SetCall(
+		[&scene]()
+		{
+		scene.SetRenderMode(1);
+		}
+	);
+
+	RenderMode3Button.SetCall(
+		[&scene]()
+		{
+		scene.SetRenderMode(2);
+		}
+	);
+
+
 	bool click = false;
    
-//  for(int i = 0; i < scene.objects.size(); i++)
+  for(int i = 0; i < scene.objects.size(); i++)
+  std::cout << i << std::endl;
 //  scene.objects[i].Dump();
 
-//  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
     
 	float yaww = 0;
 	scene.cameras[0].pitch = -30;
@@ -81,7 +97,6 @@ int Launch()
 	for(int i = 0; i < scene.cameras.size(); i++)
 	scene.cameras[i].aspect = (float)width / (float)height;
 
-	
 	yaww += 0.4f;
 	scene.cameras[0].yaw += 0.4f;
 	scene.cameras[0].position.x = 5 *  cosf(yaww * 3.1415 / 180);
@@ -96,24 +111,32 @@ int Launch()
 
 	glDisable(GL_DEPTH_TEST);
 
-	text.SetText(std::to_string(h));
 
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
 	{
 	click = true; 
-	but.Check();
+
+	RenderMode1Button.Check();
+	RenderMode2Button.Check();
+	RenderMode3Button.Check();
+
 	}
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 	{
 	click = false;
 	}
 
-	text.Update();
-	but.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
+	RenderMode1Button.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
+	RenderMode2Button.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
+	RenderMode3Button.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
 
-	but.Render();
-	text.Render();
-	greettext.Render();
+	RenderMode1Button.Render();
+	RenderMode2Button.Render();
+	RenderMode3Button.Render();
+
+
+//	but.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
+
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();

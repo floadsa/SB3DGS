@@ -21,6 +21,31 @@ void main() {
 }
 )";
 
+inline const char *LineVlmVxShader =
+"#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec2 aUV;\n"
+"layout (location = 2) in vec3 aNormal;\n"
+"out vec3 fragNormal;\n"
+"out vec2 fragUV;\n"
+"out vec3 fragPos;\n"
+"uniform mat4 proj;\n"
+"uniform mat4 view;\n"
+"void main()\n"
+"{\n"
+"    fragUV = aUV;\n"
+"    fragNormal = aNormal;\n"
+"    gl_Position = proj * view * vec4(aPos, 1.0);\n"
+"}\n";
+
+
+inline const char *LineVlmFgShader =
+"#version 330 core\n"
+"out vec4 FragColor;\n"
+"void main()\n"
+"{\n"
+"   FragColor = vec4(0,0,0,1);\n"
+"}\n";
 
 inline const char *VlmVxShader =
 "#version 330 core\n"
@@ -41,6 +66,49 @@ inline const char *VlmVxShader =
 
 
 inline const char *VlmFgShader =
+"#version 330 core\n"
+"#define MAX_LIGHTS 16\n"
+"out vec4 FragColor;\n"
+"in vec2 fragUV;\n"
+"in vec3 fragNormal;\n"
+"in vec3 fragPos;\n"
+"uniform vec3 lightDir[MAX_LIGHTS];\n"
+"uniform vec3 lightColor[MAX_LIGHTS];\n"
+"void main()\n"
+"{\n"
+"   vec3 norm = normalize(fragNormal);\n"
+"   vec3 baseColor = vec3(0.5,0.5,0.5);\n"
+"   vec3 result = vec3(0.0);\n"
+"   for (int i = 0; i < MAX_LIGHTS; ++i)\n"
+"   {\n"
+"       vec3 lDir = normalize(lightDir[i]);\n"
+"       float diff = max(dot(norm, lDir), 0.0);\n"
+"       vec3 diffuseComp = baseColor * diff * lightColor[i];\n"
+"       result += diffuseComp;\n"
+"   }\n"
+"   FragColor = vec4(result, 1);\n"
+"}\n";
+
+
+inline const char *ColorVlmVxShader =
+"#version 330 core\n"
+"layout (location = 0) in vec3 aPos;\n"
+"layout (location = 1) in vec2 aUV;\n"
+"layout (location = 2) in vec3 aNormal;\n"
+"out vec3 fragNormal;\n"
+"out vec2 fragUV;\n"
+"out vec3 fragPos;\n"
+"uniform mat4 proj;\n"
+"uniform mat4 view;\n"
+"void main()\n"
+"{\n"
+"    fragUV = aUV;\n"
+"    fragNormal = aNormal;\n"
+"    gl_Position = proj * view * vec4(aPos, 1.0);\n"
+"}\n";
+
+
+inline const char *ColorVlmFgShader =
 "#version 330 core\n"
 "#define MAX_LIGHTS 16\n"
 "out vec4 FragColor;\n"
@@ -69,6 +137,3 @@ inline const char *VlmFgShader =
 "   }\n"
 "   FragColor = vec4(result, diffuse.a);\n"
 "}\n";
-
-//"   float diff = abs(dot(norm, normalize(lightDir)));\n"
-//"   vec3 result = baseColor * diff;\n"

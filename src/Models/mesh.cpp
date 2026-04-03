@@ -8,9 +8,8 @@ Mesh::Mesh()
 
 void Mesh::SetShader(const char* vshader, const char* fshader)
 {
-shaderProgram = CreateShaderProgram(CmnVxShader, CmnFgShader);	
+shaderProgram = CreateShaderProgram(vshader, fshader);	
 }
-
 
 void Mesh::Clear()
 {

@@ -17,7 +17,11 @@ GLuint CompileShader(GLenum type, const char* source)
         {
             char infoLog[1024];
             glGetShaderInfoLog(shader, 1024, nullptr, infoLog);
-            std::cout << "Shader compile error:\n" << infoLog << std::endl;
+            std::cout << "\033[31m" << "Shader compile error:\n" << "\033[0m" << infoLog << std::endl;
+        }
+        else
+        {
+        //	std::cout << "\033[0m" << "Shader compiled successfully " << "\033[32m" << "[OK]" << "\033[0m" << std::endl;
         }
 
 

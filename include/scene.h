@@ -17,6 +17,8 @@ class Scene
 protected:
 
 int CurrentCamera;
+int RenderMode;
+
 
 public:
 
@@ -24,6 +26,7 @@ std::vector<Object> objects;
 std::vector<Camera> cameras;
 
 Scene();
+void SetRenderMode(int i);
 void Update();
 void AddObject();
 void ConvertFromObj(const char* objfilename);

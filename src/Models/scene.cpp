@@ -14,6 +14,26 @@ void Scene::AddObject()
 	objects.back().SetTexture("buttonfill.png");
 }
 
+void Scene::SetRenderMode(int i)
+{
+	RenderMode = i;
+	if(i == 0)
+	{
+		for(int i = 0; i < objects.size(); i++)
+		objects[i].SetShader(LineVlmVxShader, LineVlmFgShader);
+	}
+	else if(i == 1)
+	{
+		for(int i = 0; i < objects.size(); i++)
+		objects[i].SetShader(VlmVxShader, VlmFgShader);
+	}
+	else if(i == 2)
+	{
+		for(int i = 0; i < objects.size(); i++)
+		objects[i].SetShader(ColorVlmVxShader, ColorVlmFgShader);
+	}
+}
+
 void Scene::ConvertFromObj(const char* objfilename)
 {
 	
@@ -230,6 +250,12 @@ void Scene::ConvertFromObj(const char* objfilename)
 
 void Scene::Render()
 {
+	if(RenderMode == 0)
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	
 	for(int i = 0; i < objects.size(); i++)
 	objects[i].Render(cameras[CurrentCamera].getViewMatrix(), cameras[CurrentCamera].getProjectionMatrix(), cameras[CurrentCamera]);
+
+	if(RenderMode == 0)
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
