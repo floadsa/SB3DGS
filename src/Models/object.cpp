@@ -57,7 +57,7 @@ glm::vec3 lightColors[16];
 
 for (int i = 0; i < 16; ++i) 
 {
-    lightDirs[i] = camera.position;
+    lightDirs[0] = camera.position;
     lightColors[i] = glm::vec3(1,1,1);
 }
 
@@ -84,9 +84,7 @@ glBindTexture(GL_TEXTURE_2D, texture);
 glUniform3fv(glGetUniformLocation(shaderProgram, "lightDir"), 2, &lightDirs[0][0]);
 glUniform3fv(glGetUniformLocation(shaderProgram, "lightColor"), 2, &lightColors[0][0]);
 
-
 glUniform3f(glGetUniformLocation(shaderProgram, "viewPos"), camera.position.x, camera.position.y, camera.position.z);
-
 
 glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
 glUniform4f(glGetUniformLocation(shaderProgram, "diffuse"), submeshes[i].material.diffuse.x, submeshes[i].material.diffuse.y, submeshes[i].material.diffuse.z, 1);

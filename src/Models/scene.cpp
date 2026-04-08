@@ -3,6 +3,7 @@
 Scene::Scene()
 {
 	CurrentCamera = 0;
+	RenderMode = 1;
 	cameras.push_back(Camera());
 }
 void Scene::AddObject()
@@ -101,7 +102,7 @@ void Scene::ConvertFromObj(const char* objfilename)
 	}
 	else
 	{
-		std::cout << "\033[0m" << "MTL File was successfully opened " << "\033[32m" << "[OK]" << "\033[0m" << std::endl;
+	//	std::cout << "\033[0m" << "MTL File was successfully opened " << "\033[32m" << "[OK]" << "\033[0m" << std::endl;
 	}
 
 	std::string line_;
@@ -154,7 +155,7 @@ void Scene::ConvertFromObj(const char* objfilename)
     }
     else
     {
-     	std::cout << "\033[0m" << "Material added successfully " << "\033[32m" << "[OK]" << "\033[0m" << std::endl;
+    // 	std::cout << "\033[0m" << "Material added successfully " << "\033[32m" << "[OK]" << "\033[0m" << std::endl;
     } 
     mtlfile.close();
 
@@ -258,4 +259,7 @@ void Scene::Render()
 
 	if(RenderMode == 0)
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+
 }

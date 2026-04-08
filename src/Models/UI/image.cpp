@@ -5,7 +5,7 @@ Image::Image()
 mesh.Init();
 }
 
-Image::Image(float _x, float _y, float _width, float _height)
+Image::Image(int _x, int _y, int _width, int _height)
 {
 width = _width;
 height = _height;
@@ -14,29 +14,34 @@ y = _y;
 
 mesh.Init();
 
-mesh.AddPoint(Point(x,y,0,1,1));
-mesh.AddPoint(Point(x + width,y,0,0,1));
-mesh.AddPoint(Point(x,y - height,0,1,0));
-mesh.AddPoint(Point(x + width,y - height,0,0,0));
-mesh.AddFace(2,0,1);
-mesh.AddFace(1,2,3);
-mesh.Update();
-	
+this->SetTexture("buttonfill.png");
+
+
 }
 
-void Image::SetSize(float _x, float _y, float _width, float _height)
+void Image::SetSize(int _x, int _y, int _width, int _height)
+{
+
+}
+
+void Image::UpdateSize(float screenwidth, float screenheight)
 {
 mesh.Clear();
 
-width = _width;
-height = _height;
-x = _x;
-y = _y;
+float realwidth, realheight;
+float realx, realy;
+float xpixelsize = 2.0f / screenwidth;
+float ypixelsize = 2.0f / screenheight;
 
-mesh.AddPoint(Point(x,y,0,1,1));
-mesh.AddPoint(Point(x + width,y,0,0,1));
-mesh.AddPoint(Point(x,y - height,0,1,0));
-mesh.AddPoint(Point(x + width,y - height,0,0,0));
+realwidth = width * xpixelsize;
+realheight = height * ypixelsize;
+realx = (x * xpixelsize) - 1;
+realy = 1 - (y * ypixelsize);
+
+mesh.AddPoint(Point(realx            ,realy             ,0,1,1));
+mesh.AddPoint(Point(realx + realwidth,realy             ,0,0,1));
+mesh.AddPoint(Point(realx            ,realy - realheight,0,1,0));
+mesh.AddPoint(Point(realx + realwidth,realy - realheight,0,0,0));
 mesh.AddFace(2,0,1);
 mesh.AddFace(1,2,3);
 mesh.Update();
@@ -53,7 +58,7 @@ void Image::SetTexture(const char* filename)
 {
 mesh.SetTexture(filename);
 }
-void Image::Update()
+void Image::Update(int mosposX, int _mosposY)
 {
 mesh.Update();
 }

@@ -3,8 +3,9 @@
 #include <functional>
 #include "image.h"
 #include "text.h"
+#include "UIobject.h"
 
-class Button
+class Button : public UIObject
 {
 protected:
 
@@ -14,25 +15,21 @@ Image body;
 Image ActiveBody;
 Text text;
 
-float x, y, width, height, size;
-float mosPosX, mosPosY;
+int x, y, width, height, size;
+int mosposX, mosposY;
 
 public:
 
-Button(float _x, float _y, float _width, float _height);
+Button(int _x, int _y, int _width, int _height);
 
-void Check();
-void Update(float mosPosX, float mosPosY);
 void Call();
-
 void SetText(const std::string& str);
+void UpdateSize(float width, float height);
+void SetCall(std::function<void()> _function);
 
-void SetCall(std::function<void()> f);
-void SetText(Text _text);
-void SetBody(Image _body);
-void SetActiveBody(Image _activeBody);
-
-void Render();
+void Check() override;
+void Update(int _mosposX, int _mosposY)override;
+void Render()override;
 
 	
 };

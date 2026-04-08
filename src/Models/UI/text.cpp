@@ -1,5 +1,5 @@
 #include "text.h"
-
+//Will be redone
 Text::Text()
 {
 mesh.Init();

@@ -1,29 +1,29 @@
 #pragma once
 
 #include "UImesh.h"
+#include "UIobject.h"
 
-class Image
+class Image : public UIObject
 {
 protected:
 UIMesh mesh;
-float width;
-float height;
-float x;
-float y;
+int width, height, x, y;
 
 public:
 
 Image();
-Image(float _x, float _y, float _width, float _height);
+Image(int _x, int _y, int _width, int _height);
 void SetTexture(const char* filename);
-void SetSize(float _x, float _y, float _width, float _height);
+void SetSize(int _x, int _y, int _width, int _height);
+void UpdateSize(float screenwidth, float screenheight);
 
 float getWidth();
 float getHeight();
 float getX();
 float getY();
 
-void Update();
-void Render();
+void Check() override {};
+void Update(int _mosposX, int _mosposY) override;
+void Render() override;
 	
 };

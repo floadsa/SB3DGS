@@ -48,6 +48,7 @@ void UIMesh::Render()
 	glBindTexture(GL_TEXTURE_2D, texture);
 	
 	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+	glUniform1i(glGetUniformLocation(shaderProgram, "outlineEnabled"), 1);
 	
 	glBindVertexArray(VAO);
 	glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_INT, 0);

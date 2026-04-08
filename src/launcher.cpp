@@ -7,6 +7,7 @@
 #include "text.h"
 #include "button.h"
 #include "scene.h"
+#include "UIscene.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -14,12 +15,16 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 void window_size_callback(GLFWwindow* window, int width, int height)
 {
-  
+  	UIScene* uiscene = static_cast<UIScene*>(glfwGetWindowUserPointer(window));
+
+  	if(uiscene)
+  	{
+  		uiscene->UpdateSize(width, height);
+  	}
 }
 
 int Launch()
 {
-
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -27,6 +32,7 @@ int Launch()
 	
 	glfwWindowHint(GLFW_DEPTH_BITS, 24);
 	GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "SB3DGS", NULL, NULL);
+
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 	glfwSetWindowSizeCallback(window, window_size_callback);  
 	glfwMakeContextCurrent(window);
@@ -44,54 +50,51 @@ int Launch()
 	int h = 0;
 
 	Scene scene;
-	scene.ConvertFromObj("monkey.obj");
+	scene.ConvertFromObj("Bomb.obj");
 
-	Button RenderMode1Button(-0.99f, 0.99f, 0.25f, 0.07f);
-	Button RenderMode2Button(-0.99f, 0.91f, 0.25f, 0.07f);
-	Button RenderMode3Button(-0.99f, 0.83f, 0.25f, 0.07f);
+	UIScene UIscene;
+	UIscene.AddObject(new Button(10, 10, 200, 50));
 
-	RenderMode1Button.SetText("LINE");
-	RenderMode2Button.SetText("GRAY");
-	RenderMode3Button.SetText("COLR");
+	Button* test = dynamic_cast<Button*>(UIscene.objects[0]);
+	test->SetCall(
+			[&scene]()
+			{
+			scene.SetRenderMode(0);
+			}
+		);
 
+	UIscene.AddObject(new Button(10, 70, 200, 50));
 
-	RenderMode1Button.SetCall(
-		[&scene]()
-		{
-		scene.SetRenderMode(0);
-		}
-	);
+	test = dynamic_cast<Button*>(UIscene.objects[1]);
+	test->SetCall(
+			[&scene]()
+			{
+			scene.SetRenderMode(1);
+			}
+		);
 
-	RenderMode2Button.SetCall(
-		[&scene]()
-		{
-		scene.SetRenderMode(1);
-		}
-	);
+	UIscene.AddObject(new Button(10, 130, 200, 50));
 
-	RenderMode3Button.SetCall(
-		[&scene]()
-		{
-		scene.SetRenderMode(2);
-		}
-	);
-
-
+	test = dynamic_cast<Button*>(UIscene.objects[2]);
+	test->SetCall(
+			[&scene]()
+			{
+			scene.SetRenderMode(2);
+			}
+		);
+	
+	glfwSetWindowUserPointer(window, &UIscene);
+	
 	bool click = false;
-   
-  for(int i = 0; i < scene.objects.size(); i++)
-  std::cout << i << std::endl;
-//  scene.objects[i].Dump();
-
-
     
 	float yaww = 0;
 	scene.cameras[0].pitch = -30;
 	
 	while(!glfwWindowShouldClose(window))
 	{
-//	std::cout << "Window resized: " << width << height << std::endl;
+
 	glfwGetWindowSize(window, &width, &height);
+	glfwGetCursorPos(window, &mouseX, &mouseY);
 
 	//This is temporary
 	for(int i = 0; i < scene.cameras.size(); i++)
@@ -101,42 +104,29 @@ int Launch()
 	scene.cameras[0].yaw += 0.4f;
 	scene.cameras[0].position.x = 5 *  cosf(yaww * 3.1415 / 180);
 	scene.cameras[0].position.z = 5 *  sinf(yaww * 3.1415 / 180);
+	//////////////////
 
-	glfwGetCursorPos(window, &mouseX, &mouseY);
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glEnable(GL_DEPTH_TEST);
+	
 	scene.Render();
 
 	glDisable(GL_DEPTH_TEST);
 
-
+	UIscene.Update(mouseX, mouseY);
+	UIscene.Render();
+	
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
 	{
 	click = true; 
-
-	RenderMode1Button.Check();
-	RenderMode2Button.Check();
-	RenderMode3Button.Check();
-
+	UIscene.Check();
 	}
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_RELEASE)
 	{
 	click = false;
 	}
-
-	RenderMode1Button.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
-	RenderMode2Button.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
-	RenderMode3Button.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
-
-	RenderMode1Button.Render();
-	RenderMode2Button.Render();
-	RenderMode3Button.Render();
-
-
-//	but.Update(mouseX/((float)width/2)-1, mouseY/((float)height/2)-1);
-
 
 	glfwSwapBuffers(window);
 	glfwPollEvents();
