@@ -1,18 +1,34 @@
 #include "text.h"
-//Will be redone
+
 Text::Text()
 {
 mesh.Init();
 }
-Text::Text(float _x, float _y, int _width, int _height, float _size)
+
+Text::Text(int _x, int _y, int _width, int _height, float _size)
 {
-size = _size;
-width = _width;
-height = _height;
 x = _x;
 y = _y;
+width = _width;
+height = _height;
+size = _size;
+this->SetText("text");
+mesh.SetTexture("WhiteFont.png");
 mesh.Init();
 }
+
+Text::Text(int _x, int _y, int _width, int _height, float _size, const std::string& str)
+{
+x = _x;
+y = _y;
+width = _width;
+height = _height;
+text = str;
+size = _size;
+mesh.SetTexture("WhiteFont.png");
+mesh.Init();
+}
+
 void Text::SetFont(const char* filename)
 {
 mesh.SetTexture(filename);
@@ -31,40 +47,99 @@ x = _x;
 y = _y;
 }
 
-void Text::Update()
+void Text::UpdateSize(float screenwidth, float screenheight)
 {
-mesh.Clear();
+	mesh.Clear();
+	
+	float realwidth, realheight;
+	float realx, realy;
+	xpixelsize = 2.0f / screenwidth;
+	ypixelsize = 2.0f / screenheight;
+	
+	realwidth = size * xpixelsize;
+	realheight = size * ypixelsize;
+	realx = (x * xpixelsize) - 1;
+	realy = 1 - (y * ypixelsize);
 
-for (size_t i = 0; i < text.size(); ++i)
-{
-char c = text[i];
-unsigned char ascii = (unsigned char)c;
+	for (size_t i = 0; i < text.size(); ++i)
+	{
+	char c = text[i];
+	unsigned char ascii = (unsigned char)c;
+	
+	int col = ascii % 16;
+	int row = ascii / 16;
+	int base = i * 4;
+	
+	int rowl = i / width;
+	if(height <= rowl){break;}
+	
+	int coll = i % width;
+	
+	float xpos = realx + coll * realwidth;
+	float ypos = realy - rowl * realheight; 
+	
+	float step = 1.0f/16.0f;
+	
+	mesh.AddPoint(Point(xpos            , ypos,             0, step * col 	     , 1 - (step * row)));
+	mesh.AddPoint(Point(xpos + realwidth, ypos,             0, step * col + step , 1 - (step * row)));
+	mesh.AddPoint(Point(xpos            , ypos - realheight,0, step * col	     , 1 - (step * row + step)));
+	mesh.AddPoint(Point(xpos + realwidth, ypos - realheight,0, step * col + step , 1 - (step * row + step)));
+	
+	mesh.AddFace(base + 0, base + 1, base + 2);
+	mesh.AddFace(base + 1, base + 3, base + 2);
+	
+	}
 
-int col = ascii % 16;
-int row = ascii / 16;
-
-int base = i * 4;
-
-int rowl = i / width;
-int coll = i % width;
-
-float xpos = x + coll * size;
-float ypos = y - rowl * size; 
-
-float step = 1.0f/16.0f;
-
-if(height <= rowl){break;}
-
-mesh.AddPoint(Point(xpos, ypos,                0, step * col 	   , 1 - (step * row)));
-mesh.AddPoint(Point(xpos + size, ypos,         0, step * col + step, 1 - (step * row)));
-mesh.AddPoint(Point(xpos, ypos - size,         0, step * col	   , 1 - (step * row + step)));
-mesh.AddPoint(Point(xpos + size, ypos - size,     0, step * col + step, 1 - (step * row + step)));
-
-mesh.AddFace(base + 0, base + 1, base + 2);
-mesh.AddFace(base + 1, base + 3, base + 2);
-
+	mesh.Update();
 }
-mesh.Update();
+
+void Text::Update(int _mosposX, int _mosposY)
+{
+
+
+	if(temptext != text)
+	{
+	
+	mesh.Clear();
+	float realwidth, realheight;
+	float realx, realy;
+	
+	realwidth = size * xpixelsize;
+	realheight = size * ypixelsize;
+	realx = (x * xpixelsize) - 1;
+	realy = 1 - (y * ypixelsize);
+
+	for (size_t i = 0; i < text.size(); ++i)
+	{
+	char c = text[i];
+	unsigned char ascii = (unsigned char)c;
+	
+	int col = ascii % 16;
+	int row = ascii / 16;
+	int base = i * 4;
+	
+	int rowl = i / width;
+	if(height <= rowl){break;}
+	
+	int coll = i % width;
+	
+	float xpos = realx + coll * realwidth;
+	float ypos = realy - rowl * realheight; 
+	
+	float step = 1.0f/16.0f;
+	
+	mesh.AddPoint(Point(xpos            , ypos,             0, step * col 	     , 1 - (step * row)));
+	mesh.AddPoint(Point(xpos + realwidth, ypos,             0, step * col + step , 1 - (step * row)));
+	mesh.AddPoint(Point(xpos            , ypos - realheight,0, step * col	     , 1 - (step * row + step)));
+	mesh.AddPoint(Point(xpos + realwidth, ypos - realheight,0, step * col + step , 1 - (step * row + step)));
+	
+	mesh.AddFace(base + 0, base + 1, base + 2);
+	mesh.AddFace(base + 1, base + 3, base + 2);
+	}
+	temptext = text;
+	mesh.Update();
+	}
+
 }
 
 void Text::Render()

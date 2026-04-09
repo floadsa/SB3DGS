@@ -104,7 +104,7 @@ inline const char *ColorVlmVxShader =
 
 inline const char *ColorVlmFgShader =
 "#version 330 core\n"
-"#define MAX_LIGHTS 16\n"
+"#define MAX_LIGHTS 2\n"
 "out vec4 FragColor;\n"
 "in vec2 fragUV;\n"
 "in vec3 fragNormal;\n"
@@ -121,7 +121,7 @@ inline const char *ColorVlmFgShader =
 "   vec3 norm = normalize(fragNormal);\n"
 "   vec3 texColor = texture(tex, fragUV).rgb;\n"
 "   vec3 baseColor = texColor * diffuse.rgb;\n"
-"   vec3 result = vec3(0.0);\n"
+"   vec3 result = vec3(0,0,0);\n"
 "   for (int i = 0; i < MAX_LIGHTS; ++i)\n"
 "   {\n"
 "       vec3 lDir = normalize(lightDir[i]);\n"

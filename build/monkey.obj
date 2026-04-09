@@ -1,5 +1,4 @@
-# Blender 5.1.0
-# www.blender.org
+# test model
 mtllib monkey.mtl
 o Suzanne
 v 0.437500 0.164062 0.765625

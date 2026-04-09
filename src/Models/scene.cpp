@@ -12,7 +12,7 @@ void Scene::AddObject()
 	objects.back().Init();
 	objects.back().AddSubmesh(Material());
 
-	objects.back().SetTexture("buttonfill.png");
+	objects.back().SetTexture("fill.png");
 }
 
 void Scene::SetRenderMode(int i)
@@ -259,7 +259,6 @@ void Scene::Render()
 
 	if(RenderMode == 0)
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-
 
 
 }

@@ -12,15 +12,14 @@ Image _body(x, y , width, height);
 _body.SetTexture("buttonfill.png");
 
 Image _activebody(x, y , width, height);
-_activebody.SetTexture("activebuttonfill.png");
+_activebody.SetTexture("outline.png");
 
 body = _body;
 ActiveBody = _activebody;
 
-//I will remake this
-text = Text(x + width / 10, y - height / 10, 10, 10, size);
-text.SetFont("BFont.png");
-text.SetText("Button");
+
+text = Text(x, y + height /10, 10, 2 ,width / 10, "Button ");
+text.SetFont("WhiteFont.png");
 
 }
 void Button::SetText(const std::string& str)
@@ -31,6 +30,8 @@ void Button::UpdateSize(float screenwidth, float screenheight)
 {
 body.UpdateSize(screenwidth, screenheight);
 ActiveBody.UpdateSize(screenwidth, screenheight);
+text.UpdateSize(screenwidth, screenheight);
+
 }
 
 void Button::SetCall(std::function<void()> _function)
@@ -49,13 +50,13 @@ mosposY = _mosposY;
 
 body.Update(_mosposX, _mosposY);
 ActiveBody.Update(_mosposX, _mosposY);
-text.Update();
+text.Update(_mosposX, _mosposY);
 }
 void Button::Check()
 {
 
 
-if(mosposX > x && mosposY >  y && mosposX < width + x && mosposY < height + y)
+if(mosposX > x && mosposY > y && mosposX < width + x && mosposY < height + y)
 {
 	this->Call();
 }
@@ -65,9 +66,11 @@ if(mosposX > x && mosposY >  y && mosposX < width + x && mosposY < height + y)
 void Button::Render()
 {
 	body.Render();
+	text.Render();
 	if(mosposX > x && mosposY >  y && mosposX < width + x && mosposY < height + y)
 	{
 	ActiveBody.Render();
 	}
+	
 }
 

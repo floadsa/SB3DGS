@@ -52,13 +52,15 @@ void Object::Render(glm::mat4 view, glm::mat4 proj, Camera camera)
 
 //Later i will develop normal light
 
-glm::vec3 lightDirs[16];
-glm::vec3 lightColors[16];
+glm::vec3 lightDirs[2];
+glm::vec3 lightColors[2];
 
-for (int i = 0; i < 16; ++i) 
+lightDirs[0] = camera.position;
+lightDirs[1] = -camera.position;
+for (int i = 0; i < 2; ++i) 
 {
-    lightDirs[0] = camera.position;
-    lightColors[i] = glm::vec3(1,1,1);
+
+  lightColors[i] = glm::vec3(1,1,1);
 }
 
 for(int i = 0; i < submeshes.size(); i++)

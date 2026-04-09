@@ -13,6 +13,7 @@ shaderProgram = CreateShaderProgram(vshader, fshader);
 
 void Mesh::Clear()
 {
+
 	vertices.clear();
 	indices.clear();
 }

@@ -1,10 +1,10 @@
 
 
 build/*
-!build/activebuttonfill.png
-!build/BFont.png
+!build/outline.png
 !build/buttonfill.png
-!build/Font.png
+!build/fill.png
+!build/WhiteFont.png
 !build/monkey.mtl
 !build/monkey.obj
 

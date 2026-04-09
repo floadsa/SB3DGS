@@ -50,12 +50,13 @@ int Launch()
 	int h = 0;
 
 	Scene scene;
-	scene.ConvertFromObj("Bomb.obj");
+	scene.ConvertFromObj("monkey.obj");
 
 	UIScene UIscene;
 	UIscene.AddObject(new Button(10, 10, 200, 50));
 
 	Button* test = dynamic_cast<Button*>(UIscene.objects[0]);
+	test->SetText("Hello button");
 	test->SetCall(
 			[&scene]()
 			{
@@ -66,6 +67,7 @@ int Launch()
 	UIscene.AddObject(new Button(10, 70, 200, 50));
 
 	test = dynamic_cast<Button*>(UIscene.objects[1]);
+	test->SetText("Test text");
 	test->SetCall(
 			[&scene]()
 			{
@@ -73,7 +75,7 @@ int Launch()
 			}
 		);
 
-	UIscene.AddObject(new Button(10, 130, 200, 50));
+	UIscene.AddObject(new Button(10, 130, 400, 100));
 
 	test = dynamic_cast<Button*>(UIscene.objects[2]);
 	test->SetCall(
@@ -82,6 +84,10 @@ int Launch()
 			scene.SetRenderMode(2);
 			}
 		);
+
+
+	UIscene.AddObject(new Text(10, 500, 15, 3, 50, "Test"));
+	Text* testtext = dynamic_cast<Text*>(UIscene.objects[3]);
 	
 	glfwSetWindowUserPointer(window, &UIscene);
 	
@@ -92,6 +98,8 @@ int Launch()
 	
 	while(!glfwWindowShouldClose(window))
 	{
+	
+	testtext->SetText(std::to_string(mouseX));
 
 	glfwGetWindowSize(window, &width, &height);
 	glfwGetCursorPos(window, &mouseX, &mouseY);
@@ -116,6 +124,7 @@ int Launch()
 	glDisable(GL_DEPTH_TEST);
 
 	UIscene.Update(mouseX, mouseY);
+//	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	UIscene.Render();
 	
 	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS && !click)
