@@ -50,7 +50,7 @@ int Launch()
 	int h = 0;
 
 	Scene scene;
-	scene.ConvertFromObj("monkey.obj");
+	scene.ConvertFromObj("Bomb.obj");
 
 	UIScene UIscene;
 	UIscene.AddObject(new Button(10, 10, 200, 50));
@@ -67,6 +67,7 @@ int Launch()
 	UIscene.AddObject(new Button(10, 70, 200, 50));
 
 	test = dynamic_cast<Button*>(UIscene.objects[1]);
+	test->SetSnap(false);
 	test->SetText("Test text");
 	test->SetCall(
 			[&scene]()
@@ -78,6 +79,7 @@ int Launch()
 	UIscene.AddObject(new Button(10, 130, 400, 100));
 
 	test = dynamic_cast<Button*>(UIscene.objects[2]);
+//	test->activity = false;
 	test->SetCall(
 			[&scene]()
 			{
@@ -85,34 +87,58 @@ int Launch()
 			}
 		);
 
-
 	UIscene.AddObject(new Text(10, 500, 15, 3, 50, "Test"));
 	Text* testtext = dynamic_cast<Text*>(UIscene.objects[3]);
+	testtext->SetSnap(false);
 	
 	glfwSetWindowUserPointer(window, &UIscene);
-	
+
+
+	float distance = 5;
+	glm::vec3 target = glm::vec3(0,0,0);
+	double lastX, lastY;
+	bool rotating = false;
 	bool click = false;
     
-	float yaww = 0;
-	scene.cameras[0].pitch = -30;
-	
+
 	while(!glfwWindowShouldClose(window))
-	{
-	
+	{	
 	testtext->SetText(std::to_string(mouseX));
 
 	glfwGetWindowSize(window, &width, &height);
 	glfwGetCursorPos(window, &mouseX, &mouseY);
 
-	//This is temporary
 	for(int i = 0; i < scene.cameras.size(); i++)
 	scene.cameras[i].aspect = (float)width / (float)height;
+	
+	if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS)
+	{
+	if (!rotating){rotating = true; lastX = mouseX; lastY = mouseY;}
+	
+	double dx = mouseX - lastX;
+	double dy = mouseY - lastY;
+	
+	lastX = mouseX;
+	lastY = mouseY;
+	
+	float sensitivity = 0.005f;
+	
+	scene.cameras[0].yaw   += dx * sensitivity;
+	scene.cameras[0].pitch += dy * sensitivity;
 
-	yaww += 0.4f;
-	scene.cameras[0].yaw += 0.4f;
-	scene.cameras[0].position.x = 5 *  cosf(yaww * 3.1415 / 180);
-	scene.cameras[0].position.z = 5 *  sinf(yaww * 3.1415 / 180);
-	//////////////////
+	float yaw   = scene.cameras[0].yaw;
+	float pitch = scene.cameras[0].pitch;
+	float dist  = distance;
+	
+	scene.cameras[0].position.x = target.x + dist * cos(pitch) * sin(-yaw);
+	scene.cameras[0].position.y = target.y + dist * sin(pitch);
+	scene.cameras[0].position.z = target.z + dist * cos(pitch) * cos(-yaw);
+	
+	}
+	else
+	{
+	rotating = false;
+	}
 
 	glClearColor(0.5, 0.5, 0.5, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

@@ -2,12 +2,12 @@
 
 Camera::Camera()
 {
-	position = glm::vec3(0, -2, 2);
+	position = glm::vec3(0, 0, 5);
 	fov = 60;
 	aspect = 1.777;
 	nearPlane = 0.01f;
 	farPlane = 200;
-	yaw = 270;
+	yaw = 0;
 	pitch = 0;
 	
 }
@@ -17,8 +17,8 @@ glm::mat4 Camera::getProjectionMatrix()
 }
 glm::mat4 Camera::getViewMatrix() 
 {
-	glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), glm::radians(yaw), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), glm::radians(pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+	glm::mat4 rotY = glm::rotate(glm::mat4(1.0f), yaw, glm::vec3(0.0f, 1.0f, 0.0f));
+	glm::mat4 rotX = glm::rotate(glm::mat4(1.0f), pitch, glm::vec3(1.0f, 0.0f, 0.0f));
 	glm::mat4 trans = glm::translate(glm::mat4(1.0f), -position);
 	return rotX * rotY * trans;
 

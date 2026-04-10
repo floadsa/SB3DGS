@@ -24,6 +24,7 @@ void SetFont(const char* filename);
 void SetText(const std::string& str);
 void SetSize(float _x, float _y, int _width, int _height, float _size);
 
+
 void Check() override {};
 void Update(int _mosposX, int _mosposY) override;
 void UpdateSize(float screenwidth, float screenheight) override;

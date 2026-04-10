@@ -9,7 +9,6 @@ class Button : public UIObject
 {
 protected:
 
-
 std::function<void()> function;
 Image body;
 Image ActiveBody;
@@ -17,6 +16,7 @@ Text text;
 
 int x, y, width, height, size;
 int mosposX, mosposY;
+float screenwidth, screenheight;
 
 public:
 
@@ -26,6 +26,8 @@ void Call();
 void SetText(const std::string& str);
 void UpdateSize(float width, float height);
 void SetCall(std::function<void()> _function);
+
+void SetSnap(bool a) override;
 
 void Check() override;
 void Update(int _mosposX, int _mosposY)override;

@@ -58,8 +58,17 @@ void Text::UpdateSize(float screenwidth, float screenheight)
 	
 	realwidth = size * xpixelsize;
 	realheight = size * ypixelsize;
-	realx = (x * xpixelsize) - 1;
 	realy = 1 - (y * ypixelsize);
+
+	if(snaptoright == true)
+	{
+	realx = 1 - ((x * xpixelsize)) - width * realwidth;
+	
+	}
+	else if(snaptoright == false)
+	{
+	realx = (x * xpixelsize) - 1;
+	}
 
 	for (size_t i = 0; i < text.size(); ++i)
 	{
@@ -106,8 +115,16 @@ void Text::Update(int _mosposX, int _mosposY)
 	
 	realwidth = size * xpixelsize;
 	realheight = size * ypixelsize;
-	realx = (x * xpixelsize) - 1;
 	realy = 1 - (y * ypixelsize);
+
+	if(snaptoright == true)
+	{
+	realx = 1 - ((x * xpixelsize)) - width * realwidth;
+	}
+	else if(snaptoright == false)
+	{
+	realx = (x * xpixelsize) - 1;
+	}
 
 	for (size_t i = 0; i < text.size(); ++i)
 	{

@@ -16,9 +16,6 @@ class Object : public Mesh
 {
 protected:
 
-
-
-
 public:
 GLuint texture;
 std::vector<Submesh> submeshes;

@@ -76,8 +76,6 @@ glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, submeshes[i].indices.size() * sizeof
 
 glBindVertexArray(0);
 
-// Updating above
-
 glUseProgram(shaderProgram);
 
 glActiveTexture(GL_TEXTURE0);
@@ -103,6 +101,7 @@ glBindVertexArray(VAO);
 glDrawElements(GL_TRIANGLES, submeshes[i].indices.size(), GL_UNSIGNED_INT, 0);
 glBindVertexArray(0);
 }
+
 }
 void Object::AddMaterial()
 {
@@ -148,7 +147,6 @@ void Object::Dump()
 	}
 
 	std::cout << std::endl << " Amount of vertices: " << vertices.size() << std::endl;
-	
 }
 
 
