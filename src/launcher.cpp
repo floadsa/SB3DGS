@@ -50,7 +50,7 @@ int Launch()
 	int h = 0;
 
 	Scene scene;
-	scene.ConvertFromObj("test.obj");
+	scene.ConvertFromObj("monkey.obj");
 
 	UIScene UIscene;
 	UIscene.AddObject(new Button(10, 10, 200, 50));
