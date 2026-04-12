@@ -33,8 +33,9 @@ void Object::Init()
 	glEnableVertexAttribArray(2);
 }
 
-void Object::Update(int i)
+void Object::Update()
 {
+/*
 glBindVertexArray(VAO);
 
 glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -43,7 +44,7 @@ glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Point), vertices.da
 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), indices.data());
 
-glBindVertexArray(0);
+glBindVertexArray(0);*/
 }
 
 
@@ -51,25 +52,62 @@ void Object::Render(glm::mat4 view, glm::mat4 proj, Camera camera)
 {
 
 //Later i will develop normal light
+std::vector<Point> rpoint;
 
 glm::vec3 lightDirs[2];
 glm::vec3 lightColors[2];
 
 lightDirs[0] = camera.position;
 lightDirs[1] = -camera.position;
+
 for (int i = 0; i < 2; ++i) 
 {
-
   lightColors[i] = glm::vec3(1,1,1);
 }
 
+if(dirtmesh)
+{
+for(int i = 0; i < materials.size(); i++)
+{
+submeshes.push_back(Submesh(materials[i]));
+
+for(int j = 0; j < faces.size(); j++)
+{
+if(faces[j].material.name != submeshes.back().material.name)
+{
+continue;
+}
+submeshes.back().AddFace(faces[j]);
+}
+}
+
+
+for(int i = 0; i < vertices.size(); i++)
+{
+rpoint.push_back(
+    Point(
+        points[vertices[i].position_index].x,
+        points[vertices[i].position_index].y,
+        points[vertices[i].position_index].z,
+        vertices[i].u,
+        vertices[i].v,
+        vertices[i].nx,
+        vertices[i].ny,
+        vertices[i].nz
+    )
+);
+}
+
+dirtmesh = false;
+}
+
+
 for(int i = 0; i < submeshes.size(); i++)
 {
-
 glBindVertexArray(VAO);
 
 glBindBuffer(GL_ARRAY_BUFFER, VBO);
-glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Point), vertices.data());
+glBufferSubData(GL_ARRAY_BUFFER, 0, rpoint.size() * sizeof(Point), rpoint.data());
 	
 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, submeshes[i].indices.size() * sizeof(unsigned int), submeshes[i].indices.data());
@@ -101,15 +139,6 @@ glBindVertexArray(VAO);
 glDrawElements(GL_TRIANGLES, submeshes[i].indices.size(), GL_UNSIGNED_INT, 0);
 glBindVertexArray(0);
 }
-
-}
-void Object::AddMaterial()
-{
-	materials.push_back(Material());
-}
-void Object::AddSubmesh(Material material)
-{
-	submeshes.push_back(Submesh(material));
 }
 
 void Object::SetTexture(const char* filename)
@@ -119,7 +148,7 @@ texture = CreateTexture(filename);
 
 void Object::Dump()
 {
-
+/*
 	for(int i = 0; i < vertices.size(); i++)
 	{
 	std::cout << " Number: " << i << std::endl;
@@ -137,21 +166,86 @@ void Object::Dump()
 	std::cout << "- - - - - - - - - - - - -  - - - - - - - -" << std::endl;
 	std::cout << std::endl;
 
-	for(int i = 0; i < submeshes.size(); i++)
-	{
+
+
 	std::cout << std::endl;
-	std::cout << "Material: " << submeshes[i].material.name << std::endl;
-	std::cout << "Diffuse: " << "R: " <<submeshes[i].material.diffuse.x << " G: " <<submeshes[i].material.diffuse.y << " B: " <<submeshes[i].material.diffuse.z << std::endl;
-	std::cout << "Specular: " << "R: " <<submeshes[i].material.specular.x << " Y: " <<submeshes[i].material.specular.y << " Z: " <<submeshes[i].material.specular.z << std::endl;
-	std::cout << "Shininess: " <<submeshes[i].material.shininess << std::endl;
+	for(int i =0; i < submeshes.size(); i++)
+	{
+	std::cout << submeshes[i].indices.size() << std::endl;
 	}
 
-	std::cout << std::endl << " Amount of vertices: " << vertices.size() << std::endl;
+	for(int i = 0; i < materials.size(); i++)
+	{
+	std::cout << std::endl;
+	std::cout << "Material: " << materials[i].name << std::endl;
+	std::cout << "Diffuse: " << "R: " <<materials[i].diffuse.x << " G: " <<materials[i].diffuse.y << " B: " <<materials[i].diffuse.z << std::endl;
+	std::cout << "Specular: " << "R: " <<materials[i].specular.x << " Y: " <<materials[i].specular.y << " Z: " <<materials[i].specular.z << std::endl;
+	std::cout << "Shininess: " <<materials[i].shininess << std::endl;
+	}
+
+			for(int i = 0; i < submeshes.size(); i++)
+			{
+			std::cout << std::endl;
+			std::cout << "Material: " << submeshes[i].material.name << std::endl;
+			std::cout << "Indices: " << submeshes[i].indices.size() << std::endl;
+			std::cout << "Diffuse: " << "R: " <<submeshes[i].material.diffuse.x << " G: " <<submeshes[i].material.diffuse.y << " B: " <<submeshes[i].material.diffuse.z << std::endl;
+			std::cout << "Specular: " << "R: " <<submeshes[i].material.specular.x << " Y: " <<submeshes[i].material.specular.y << " Z: " <<submeshes[i].material.specular.z << std::endl;
+			std::cout << "Shininess: " <<submeshes[i].material.shininess << std::endl;
+			}
+			std::cout << std::endl << " Amount of vertices: " << vertices.size() << std::endl;
+			
+	for(int i = 0; i < materials.size(); i++)
+	{
+	std::cout << std::endl;
+	std::cout << "Material: " << materials[i].name << std::endl;
+	std::cout << "Diffuse: " << "R: " <<materials[i].diffuse.x << " G: " <<materials[i].diffuse.y << " B: " <<materials[i].diffuse.z << std::endl;
+	std::cout << "Specular: " << "R: " <<materials[i].specular.x << " Y: " <<materials[i].specular.y << " Z: " <<materials[i].specular.z << std::endl;
+	std::cout << "Shininess: " <<materials[i].shininess << std::endl;
+	} */
+	
+	
+
+	/*	for(int i = 0; i < faces.size(); i++)
+		{
+			std::cout << std::endl;
+			std::cout << faces[i].indices[0] << " "<< faces[i].indices[1] <<" "<< faces[i].indices[2] <<std::endl;
+			std::cout << faces[i].material->name << " " << faces[i].material->diffuse.x << faces[i].material->diffuse.y << std::endl;
+		}*/
+/*
+		for(int i = 0; i < vertices.size(); i++)
+		{
+		std::cout << " Number: " << i << std::endl;
+		std::cout << " X: " << vertices[i].x << " Y: " << vertices[i].y << " Z: " << vertices[i].z << std::endl;
+		std::cout << " U: " << vertices[i].u << " V: " << vertices[i].v << std::endl;
+		std::cout << " NX: " << vertices[i].nx << " NY: " << vertices[i].ny << " NZ: " << vertices[i].nz << std::endl << std::endl;
+		}
+		std::cout << std::endl;*/
+		
+	//	std::cout << "- - - - - - - - Indices: - - - - - - - -" << std::endl;
+	//	for(int i = 0; i < indices.size(); i+=3)
+	//	{
+	//	std::cout << "| " << indices[i] << " | "  << indices[i+1] << " | "  << indices[i+2] << " |" << std::endl;
+	//	}
+	//	std::cout << "- - - - - - - - - - - - -  - - - - - - - -" << std::endl;
+	//	std::cout << std::endl;
+/*
+for(int i = 0; i < points.size(); i++)
+{
+std::cout << " POINT: " << i << " " << points[i].x << " " << points[i].y << " " << points[i].z << std::endl;
+}
+
+for(int i = 0; i < vertices.size(); i++)
+{
+std::cout << " VERTEX: " << i << " " << vertices[i].position_index << std::endl;
+}
+*/
+		
+	
 }
 
 
 void Object::ReNormal()
-{
+{/*
 	for(int i = 0; i < indices.size(); i+=3)
 	{
 		glm::vec3 a = glm::vec3(vertices[indices[i+1]].x, vertices[indices[i+1]].y, vertices[indices[i+1]].z) - glm::vec3(vertices[indices[i]].x, vertices[indices[i]].y, vertices[indices[i]].z);
@@ -170,8 +264,7 @@ void Object::ReNormal()
 		vertices[indices[i+2]].nx = n.x;
 		vertices[indices[i+2]].ny = n.y;
 		vertices[indices[i+2]].nz = n.z;
-	}
-	//std::cout << vertices.size() << std::endl;
+	}*/
 }
 
 

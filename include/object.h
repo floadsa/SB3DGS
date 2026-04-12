@@ -5,6 +5,7 @@
 #include "gl_utils.h"
 #include "submesh.h"
 #include "material.h"
+#include "face.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -15,20 +16,19 @@
 class Object : public Mesh
 {
 protected:
-
-public:
-GLuint texture;
 std::vector<Submesh> submeshes;
-std::vector<Material> materials;
+public:
+bool dirtmesh = true;
+GLuint texture;
+//std::vector<Material> materials;
+//std::vector<Face> faces;
 
 Object();
 void Init();
-void Update(int i);
+void Update();
 void Render(glm::mat4 view, glm::mat4 prog, Camera camera);
 void ReNormal();
-void AddMaterial();
 void SetTexture(const char* filename);
-void AddSubmesh(Material material);
 
 void Dump();
 

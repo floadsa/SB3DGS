@@ -50,13 +50,13 @@ int Launch()
 	int h = 0;
 
 	Scene scene;
-	scene.ConvertFromObj("Bomb.obj");
+	scene.ConvertFromObj("test.obj");
 
 	UIScene UIscene;
 	UIscene.AddObject(new Button(10, 10, 200, 50));
 
 	Button* test = dynamic_cast<Button*>(UIscene.objects[0]);
-	test->SetText("Hello button");
+	test->SetText("Line mode");
 	test->SetCall(
 			[&scene]()
 			{
@@ -67,19 +67,7 @@ int Launch()
 	UIscene.AddObject(new Button(10, 70, 200, 50));
 
 	test = dynamic_cast<Button*>(UIscene.objects[1]);
-	test->SetSnap(false);
-	test->SetText("Test text");
-	test->SetCall(
-			[&scene]()
-			{
-			scene.SetRenderMode(1);
-			}
-		);
-
-	UIscene.AddObject(new Button(10, 130, 400, 100));
-
-	test = dynamic_cast<Button*>(UIscene.objects[2]);
-//	test->activity = false;
+	test->SetText("Color mode");
 	test->SetCall(
 			[&scene]()
 			{
@@ -87,10 +75,18 @@ int Launch()
 			}
 		);
 
-	UIscene.AddObject(new Text(10, 500, 15, 3, 50, "Test"));
-	Text* testtext = dynamic_cast<Text*>(UIscene.objects[3]);
-	testtext->SetSnap(false);
-	
+	UIscene.AddObject(new Button(10, 130, 200, 50));
+
+	test = dynamic_cast<Button*>(UIscene.objects[2]);
+	test->SetText("Test button");
+	test->SetCall(
+			[&scene]()
+			{
+			for(int i = 0; i < scene.objects.size(); i++)
+				scene.objects[i].dirtmesh = true;
+			}
+		);
+
 	glfwSetWindowUserPointer(window, &UIscene);
 
 
@@ -103,7 +99,6 @@ int Launch()
 
 	while(!glfwWindowShouldClose(window))
 	{	
-	testtext->SetText(std::to_string(mouseX));
 
 	glfwGetWindowSize(window, &width, &height);
 	glfwGetCursorPos(window, &mouseX, &mouseY);

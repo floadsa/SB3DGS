@@ -7,7 +7,7 @@ class UIObject
 public:
 bool activity = true;
 protected:
-bool snaptoright = true;
+bool snaptoright = false;
 
 public:
 virtual void SetSnap(bool a) {snaptoright = a;};

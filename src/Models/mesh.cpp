@@ -11,24 +11,18 @@ void Mesh::SetShader(const char* vshader, const char* fshader)
 shaderProgram = CreateShaderProgram(vshader, fshader);	
 }
 
-void Mesh::Clear()
+void Mesh::AddPoint(glm::vec3 point)
+{points.push_back(point);}
+
+void Mesh::AddVertex(Vertex vertex)
+{vertices.push_back(vertex);}
+
+void Mesh::AddMaterial(Material _material)
 {
-
-	vertices.clear();
-	indices.clear();
+materials.push_back(_material);
 }
-
-
-void Mesh::AddPoint(Point point)
-{vertices.push_back(point);}
 
 void Mesh::AddFace(unsigned int index_one, unsigned int index_two, unsigned int index_three)
 {
-indices.push_back(index_one);
-indices.push_back(index_two);
-indices.push_back(index_three);
-}
-void Mesh::AddIndex(unsigned int index)
-{
-indices.push_back(index);
+
 }

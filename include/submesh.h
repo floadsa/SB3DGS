@@ -2,6 +2,7 @@
 
 #include <vector> 
 #include "material.h" 
+#include "face.h" 
 
 class Submesh
 {
@@ -9,8 +10,9 @@ public:
 	std::vector<unsigned int> indices;
 	Material material;
 
-	Submesh(const Material& _material);
+	Submesh(Material _material);
 
-	void AddIndex(unsigned int index);
+	void AddFace(Face _face);
+	
 
 };

@@ -1,12 +1,13 @@
 #include "submesh.h"
 
-Submesh::Submesh(const Material& _material)
-: material(_material)
+Submesh::Submesh(Material _material)
 {
-	
+	material = _material;
 }
 
-void Submesh::AddIndex(unsigned int index)
+void Submesh::AddFace(Face _face)
 {
-	indices.push_back(index);
+	indices.push_back(_face.indices[0]);
+	indices.push_back(_face.indices[1]);
+	indices.push_back(_face.indices[2]);
 }

@@ -27,6 +27,24 @@ void UIMesh::Init()
 	glEnableVertexAttribArray(1);
 }
 
+void UIMesh::Clear()
+{
+
+	vertices.clear();
+	indices.clear();
+}
+
+
+void UIMesh::AddPoint(Point point)
+{vertices.push_back(point);}
+
+void UIMesh::AddFace(unsigned int index_one, unsigned int index_two, unsigned int index_three)
+{
+indices.push_back(index_one);
+indices.push_back(index_two);
+indices.push_back(index_three);
+}
+
 void UIMesh::Update()
 {
 glBindVertexArray(VAO);
