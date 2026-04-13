@@ -1,7 +1,8 @@
-# SB3DGS ><  )'>
+# SB3DGS <º))))><
 
 ## description:
-###SB3DGS - simple bruncell's 3D graphic software  
+
+SB3DGS - simple bruncell's 3D graphic software  
 
 Created for easy editing of 3D models
 Currently under active development
