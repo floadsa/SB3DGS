@@ -29,7 +29,8 @@ void SetCall(std::function<void()> _function);
 
 void SetSnap(bool a) override;
 
-void Check() override;
+void Press(char lastchar, int lastkey) override {};
+void Click() override;
 void Update(int _mosposX, int _mosposY)override;
 void Render()override;
 

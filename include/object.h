@@ -17,17 +17,17 @@ class Object : public Mesh
 {
 protected:
 std::vector<Submesh> submeshes;
+glm::vec3 pivot;
 public:
 bool dirtmesh = true;
-GLuint texture;
-//std::vector<Material> materials;
-//std::vector<Face> faces;
 
+GLuint texture;
 Object();
 void Init();
 void Update();
 void Render(glm::mat4 view, glm::mat4 prog, Camera camera);
 void ReNormal();
+void SetPosition(float _x, float _y, float _z);
 void SetTexture(const char* filename);
 
 void Dump();

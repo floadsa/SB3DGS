@@ -1,4 +1,4 @@
-#include "../include/launcher.h"
+#include "launcher.h"
 
 int main()
 {

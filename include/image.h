@@ -22,7 +22,8 @@ float getHeight();
 float getX();
 float getY();
 
-void Check() override {};
+void Press(char lastchar, int lastkey) override {};
+void Click() override {};
 void Update(int _mosposX, int _mosposY) override;
 void Render() override;
 	

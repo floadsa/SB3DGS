@@ -1,6 +1,8 @@
 
 build/*
-!build/outline.png
+!build/buttonfill.png
+!build/EditBoxActiveBody.png
+!build/ButtonActiveBody.png
 !build/buttonfill.png
 !build/fill.png
 !build/WhiteFont.png

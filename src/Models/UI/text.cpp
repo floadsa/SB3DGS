@@ -37,6 +37,10 @@ void Text::SetText(const std::string& str)
 {
 text = str;	
 }
+std::string Text::GetText()
+{
+return text;
+}
 
 void Text::SetSize(float _x, float _y, int _width, int _height, float _size)
 {
@@ -45,6 +49,20 @@ width = _width;
 height = _height;
 x = _x;
 y = _y;
+}
+
+size_t Text::GetSize()
+{
+return text.size();
+}
+
+void Text::AddLetter(const char& letter, unsigned int cursore)
+{
+	text.insert(cursore, 1, letter);
+}
+void Text::EraseLetter(unsigned int cursore)
+{
+	text.erase(cursore, 1);
 }
 
 void Text::UpdateSize(float screenwidth, float screenheight)

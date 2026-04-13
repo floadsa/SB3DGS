@@ -29,12 +29,21 @@ void UIScene::UpdateSize(float screenwidth, float screenheight)
 	objects[i]->UpdateSize(screenwidth, screenheight);
 	}
 }
-void UIScene::Check()
+void UIScene::Click()
 {
 	for(int i = 0; i < objects.size(); i++)
 	{
 	if(objects[i]->activity == true)
-	objects[i]->Check();
+	objects[i]->Click();
+	}
+}
+
+void UIScene::Press()
+{
+	for(int i = 0; i < objects.size(); i++)
+	{
+	if(objects[i]->activity == true)
+	objects[i]->Press(lastchar, lastkey);
 	}
 }
 

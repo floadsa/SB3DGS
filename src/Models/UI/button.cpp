@@ -12,7 +12,7 @@ Image _body(x, y , width, height);
 _body.SetTexture("buttonfill.png");
 
 Image _activebody(x, y , width, height);
-_activebody.SetTexture("outline.png");
+_activebody.SetTexture("ButtonActiveBody.png");
 
 body = _body;
 ActiveBody = _activebody;
@@ -64,7 +64,7 @@ void Button::SetSnap(bool a)
 	ActiveBody.SetSnap(a);
 }
 
-void Button::Check()
+void Button::Click()
 {
 
 if(snaptoright == true)
@@ -83,7 +83,6 @@ if(mosposX > x && mosposY >  y && mosposX < width + x && mosposY < height + y)
 void Button::Render()
 {
 	body.Render();
-	text.Render();
 
 	if(snaptoright == true)
 	{
@@ -96,7 +95,7 @@ void Button::Render()
 	{
 	ActiveBody.Render();}
 	}
-	
+	text.Render();
 	
 }
 

@@ -14,13 +14,13 @@ class Mesh
 {
 protected:
 
-std::vector<glm::vec3> points;
 std::vector<Vertex> vertices;
 GLuint VAO, VBO, EBO;
 GLuint shaderProgram;
 
 public:
 
+std::vector<glm::vec3> points;
 std::vector<Material> materials;
 std::vector<Face> faces;
 

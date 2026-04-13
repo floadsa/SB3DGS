@@ -1,6 +1,5 @@
 #include "object.h"
 #include "light.h"
-//#include "iostream"
 
 Object::Object()
 {
@@ -9,42 +8,48 @@ Object::Object()
 void Object::Init()
 {
 
-	shaderProgram = CreateShaderProgram(VlmVxShader, VlmFgShader);	
-	
-	glGenVertexArrays(1, &VAO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &EBO);
-	
-	glBindVertexArray(VAO);
-	
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, 200000 * sizeof(Point), nullptr, GL_DYNAMIC_DRAW);
-	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, 200000 * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
-	
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Point), (void*)0);
-	glEnableVertexAttribArray(0);
-	
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Point), (void*)(offsetof(Point, u)));
-	glEnableVertexAttribArray(1);
+pivot = glm::vec3(0,0,0);
 
-	glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Point), (void*)(offsetof(Point, nx)));
-	glEnableVertexAttribArray(2);
+shaderProgram = CreateShaderProgram(VlmVxShader, VlmFgShader);	
+	
+glGenVertexArrays(1, &VAO);
+glGenBuffers(1, &VBO);
+glGenBuffers(1, &EBO);
+	
+glBindVertexArray(VAO);
+	
+glBindBuffer(GL_ARRAY_BUFFER, VBO);
+glBufferData(GL_ARRAY_BUFFER, 200000 * sizeof(Point), nullptr, GL_DYNAMIC_DRAW);
+	
+glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+glBufferData(GL_ELEMENT_ARRAY_BUFFER, 200000 * sizeof(unsigned int), nullptr, GL_DYNAMIC_DRAW);
+	
+glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Point), (void*)0);
+glEnableVertexAttribArray(0);
+	
+glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Point), (void*)(offsetof(Point, u)));
+glEnableVertexAttribArray(1);
+
+glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Point), (void*)(offsetof(Point, nx)));
+glEnableVertexAttribArray(2);
 }
 
 void Object::Update()
 {
-/*
-glBindVertexArray(VAO);
 
-glBindBuffer(GL_ARRAY_BUFFER, VBO);
-glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Point), vertices.data());
-	
-glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(unsigned int), indices.data());
+}
 
-glBindVertexArray(0);*/
+void Object::SetPosition(float _x, float _y, float _z)
+{
+glm::vec3 move_value = glm::vec3(_x, _y, _z) - pivot;
+
+pivot = glm::vec3(_x, _y, _z);
+
+for(int i = 0; i < points.size(); i++)
+{
+	points[i] += move_value;	
+}
+dirtmesh = true;
 }
 
 
@@ -67,87 +72,87 @@ for (int i = 0; i < 2; ++i)
 
 if(dirtmesh)
 {
-for(int i = 0; i < materials.size(); i++)
-{
-submeshes.push_back(Submesh(materials[i]));
-
-for(int j = 0; j < faces.size(); j++)
-{
-if(faces[j].material.name != submeshes.back().material.name)
-{
-continue;
-}
-submeshes.back().AddFace(faces[j]);
-}
-}
+	for(int i = 0; i < materials.size(); i++)
+	{
+		submeshes.push_back(Submesh(materials[i]));
+		for(int j = 0; j < faces.size(); j++)
+		{
+		if(faces[j].material.name != submeshes.back().material.name){continue;}
+		submeshes.back().AddFace(faces[j]);
+		}
+	}
 
 
-for(int i = 0; i < vertices.size(); i++)
-{
-rpoint.push_back(
-    Point(
-        points[vertices[i].position_index].x,
-        points[vertices[i].position_index].y,
-        points[vertices[i].position_index].z,
-        vertices[i].u,
-        vertices[i].v,
-        vertices[i].nx,
-        vertices[i].ny,
-        vertices[i].nz
-    )
-);
-}
+	for(int i = 0; i < vertices.size(); i++)
+	{
+			rpoint.push_back
+			(
+   			Point(
+        	points[vertices[i].position_index].x,
+        	points[vertices[i].position_index].y,
+        	points[vertices[i].position_index].z,
+        	vertices[i].u,
+        	vertices[i].v,
+        	vertices[i].nx,
+        	vertices[i].ny,
+        	vertices[i].nz
+    		)
+		);
+	}
 
-dirtmesh = false;
+	dirtmesh = false;
 }
 
 
 for(int i = 0; i < submeshes.size(); i++)
 {
-glBindVertexArray(VAO);
+	glBindVertexArray(VAO);
 
-glBindBuffer(GL_ARRAY_BUFFER, VBO);
-glBufferSubData(GL_ARRAY_BUFFER, 0, rpoint.size() * sizeof(Point), rpoint.data());
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferSubData(GL_ARRAY_BUFFER, 0, rpoint.size() * sizeof(Point), rpoint.data());
 	
-glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, submeshes[i].indices.size() * sizeof(unsigned int), submeshes[i].indices.data());
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, submeshes[i].indices.size() * sizeof(unsigned int), submeshes[i].indices.data());
 
-glBindVertexArray(0);
+	glBindVertexArray(0);
 
-glUseProgram(shaderProgram);
+	glUseProgram(shaderProgram);
 
-glActiveTexture(GL_TEXTURE0);
-glBindTexture(GL_TEXTURE_2D, texture);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
-glUniform3fv(glGetUniformLocation(shaderProgram, "lightDir"), 2, &lightDirs[0][0]);
-glUniform3fv(glGetUniformLocation(shaderProgram, "lightColor"), 2, &lightColors[0][0]);
+	glUniform3fv(glGetUniformLocation(shaderProgram, "lightDir"), 2, &lightDirs[0][0]);
+	glUniform3fv(glGetUniformLocation(shaderProgram, "lightColor"), 2, &lightColors[0][0]);
 
-glUniform3f(glGetUniformLocation(shaderProgram, "viewPos"), camera.position.x, camera.position.y, camera.position.z);
+	glUniform3f(glGetUniformLocation(shaderProgram, "viewPos"), camera.position.x, camera.position.y, camera.position.z);
 
-glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
-glUniform4f(glGetUniformLocation(shaderProgram, "diffuse"), submeshes[i].material.diffuse.x, submeshes[i].material.diffuse.y, submeshes[i].material.diffuse.z, 1);
-glUniform3f(glGetUniformLocation(shaderProgram, "specular"), submeshes[i].material.specular.x, submeshes[i].material.specular.y, submeshes[i].material.specular.z);
-glUniform1f(glGetUniformLocation(shaderProgram, "shininess"), submeshes[i].material.shininess);
+	glUniform1i(glGetUniformLocation(shaderProgram, "tex"), 0);
+	glUniform4f(glGetUniformLocation(shaderProgram, "diffuse"), submeshes[i].material.diffuse.x, submeshes[i].material.diffuse.y, submeshes[i].material.diffuse.z, 1);
+	glUniform3f(glGetUniformLocation(shaderProgram, "specular"), submeshes[i].material.specular.x, submeshes[i].material.specular.y, submeshes[i].material.specular.z);
+	glUniform1f(glGetUniformLocation(shaderProgram, "shininess"), submeshes[i].material.shininess);
 
-GLint projLoc = glGetUniformLocation(shaderProgram, "proj");
-GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
+	GLint projLoc = glGetUniformLocation(shaderProgram, "proj");
+	GLint viewLoc = glGetUniformLocation(shaderProgram, "view");
 
-glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
-glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
-glBindVertexArray(VAO);
-glDrawElements(GL_TRIANGLES, submeshes[i].indices.size(), GL_UNSIGNED_INT, 0);
-glBindVertexArray(0);
+	glBindVertexArray(VAO);
+	glDrawElements(GL_TRIANGLES, submeshes[i].indices.size(), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
 }
+
 }
 
 void Object::SetTexture(const char* filename)
 {
-texture = CreateTexture(filename);
+	texture = CreateTexture(filename);
 }
 
 void Object::Dump()
 {
+
+//THIS FOR DEBUGING
 /*
 	for(int i = 0; i < vertices.size(); i++)
 	{
@@ -239,32 +244,34 @@ for(int i = 0; i < vertices.size(); i++)
 std::cout << " VERTEX: " << i << " " << vertices[i].position_index << std::endl;
 }
 */
-		
-	
 }
 
 
 void Object::ReNormal()
-{/*
-	for(int i = 0; i < indices.size(); i+=3)
+{
+	//DOES NOT WORK WELL
+	for(int i = 0; i < faces.size(); i++)
 	{
-		glm::vec3 a = glm::vec3(vertices[indices[i+1]].x, vertices[indices[i+1]].y, vertices[indices[i+1]].z) - glm::vec3(vertices[indices[i]].x, vertices[indices[i]].y, vertices[indices[i]].z);
-		glm::vec3 b = glm::vec3(vertices[indices[i+2]].x, vertices[indices[i+2]].y, vertices[indices[i+2]].z) - glm::vec3(vertices[indices[i]].x, vertices[indices[i]].y, vertices[indices[i]].z);
+		glm::vec3 a = points[vertices[faces[i].indices[0]].position_index] -
+					  points[vertices[faces[i].indices[1]].position_index];
+
+		glm::vec3 b = points[vertices[faces[i].indices[0]].position_index] -
+					  points[vertices[faces[i].indices[2]].position_index];
 
 		glm::vec3 n = glm::normalize(glm::cross(a, b));
 
-		vertices[indices[i]].nx = n.x;
-		vertices[indices[i]].ny = n.y;
-		vertices[indices[i]].nz = n.z;
+		vertices[faces[i].indices[0]].nx = n.x;
+		vertices[faces[i].indices[0]].ny = n.y;
+		vertices[faces[i].indices[0]].nz = n.z;
 
-		vertices[indices[i+1]].nx = n.x;
-		vertices[indices[i+1]].ny = n.y;
-		vertices[indices[i+1]].nz = n.z;
+		vertices[faces[i].indices[1]].nx = n.x;
+		vertices[faces[i].indices[1]].ny = n.y;
+		vertices[faces[i].indices[1]].nz = n.z;
 
-		vertices[indices[i+2]].nx = n.x;
-		vertices[indices[i+2]].ny = n.y;
-		vertices[indices[i+2]].nz = n.z;
-	}*/
+		vertices[faces[i].indices[2]].nx = n.x;
+		vertices[faces[i].indices[2]].ny = n.y;
+		vertices[faces[i].indices[2]].nz = n.z;
+	}
 }
 
 
